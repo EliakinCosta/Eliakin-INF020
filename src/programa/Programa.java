@@ -39,13 +39,13 @@ public class Programa {
             mutex = new Semaphore(1);
             empty = new Semaphore(BUFFER_SIZE);
             full = new Semaphore();
-            Consumer c = new Consumer(this, mutex, empty, full);
-            Producer p = new Producer(this, mutex, empty, full);
+            Consumer c = new Consumer(1,20, this, mutex, empty, full);
+            Producer p = new Producer(1, 30, this, mutex, empty, full);
             c.start();
             p.start();
                      
-            Consumer c1 = new Consumer(this, mutex, empty, full);
-            Producer p1 = new Producer(this, mutex, empty, full);
+            Consumer c1 = new Consumer(2, 40, this, mutex, empty, full);
+            Producer p1 = new Producer(2, 30, this, mutex, empty, full);
             c1.start();
             p1.start();
         }

@@ -17,13 +17,16 @@ package programa;
 public class Consumer extends Thread {
 
 	public int id;
+	public int consumoTotal;
 	public Semaphore mutex;
 	public Semaphore empty;
 	public Semaphore full;
 
 	Programa a;
 
-	public Consumer(Programa x, Semaphore m, Semaphore e, Semaphore f) {
+	public Consumer(int id, int consumoTotal, Programa x, Semaphore m, Semaphore e, Semaphore f) {
+		this.id = id;
+		this.consumoTotal = consumoTotal;
 		a = x;
 		mutex = m;
 		empty = e;
@@ -31,17 +34,16 @@ public class Consumer extends Thread {
 	}
 
 	public void run() {
-
-		while (true) {
-			full.down(); // decrementa o contador de itens preenchidos no buffer
-			mutex.down(); // entra na área crítica
+		for (int i = 0; i < consumoTotal; i++) {
+			full.down();
+			mutex.down();
 			int item;
 			item = (Integer) a.buffer.get(0);
 			a.buffer.remove(0);
-			mutex.up(); // sai da área crítica
-			System.out.println("consumer: consuming item" + item);
-			empty.up(); // incrementa o contador de itens livres no buffer
+			System.out.println("consumer:" + id + " consuming item " + item);			
+			mutex.up();
+			empty.up();
 		}
-
 	}
 }
+	

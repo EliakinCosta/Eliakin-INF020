@@ -15,31 +15,36 @@ package programa;
  * @author ads
  */
 public class Producer extends Thread {
-    
-        Programa a;
-        
-        public Semaphore mutex;
-        public Semaphore empty;
-        public Semaphore full;
-        
-        public static int contador = 1;
 
-        public Producer(Programa x, Semaphore m, Semaphore e, Semaphore f) {
-               a = x;
-               mutex = m;
-               empty = e;
-               full = f;
-        }
+	Programa a;
 
-        public void run() {
-            while (true) {
-                empty.down();  // decrementa o contador de itens livres no buffer
-                mutex.down();  // entra na região crítica
-                contador += 1; 
-                a.buffer.add(contador);                
-                mutex.up();    // sai da região crítica
-                full.up();     // incrementa o contador de itens preenchidos no buffer
-                System.out.println("produtor: producing item "+contador);
-            }
-        }    
+	public Semaphore mutex;
+	public Semaphore empty;
+	public Semaphore full;
+	
+	public int id;
+	public int producaoTotal;
+
+	public static int contador = 0;
+
+	public Producer(int id, int producaoTotal, Programa x, Semaphore m, Semaphore e, Semaphore f) {
+		this.id = id;
+		this.producaoTotal = producaoTotal;
+		a = x;
+		mutex = m;
+		empty = e;
+		full = f;
+	}
+
+	public void run() {
+		for (int i = 0; i < producaoTotal; i++) {
+			empty.down();
+			mutex.down();
+			contador += 1;
+			a.buffer.add(contador);
+			System.out.println("produtor:" + id + " producing item " + contador);
+			mutex.up();
+			full.up();
+        }					
+	}
 }
