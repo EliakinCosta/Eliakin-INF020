@@ -7,6 +7,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "loginwidget.h"
+#include <QStackedWidget>
+
 class IConta;
 
 namespace Ui {
@@ -22,9 +25,12 @@ public:
     ~MainWindow();
     bool loadPlugin();
 private:
+    void initialize();
+
     Ui::MainWindow *ui;
     IConta* m_contaPlugin;
-    void initialize();
+    LoginWidget* m_loginWidget;
+    QStackedWidget* m_stack;
 };
 
 #endif // MAINWINDOW_H

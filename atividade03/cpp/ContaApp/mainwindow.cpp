@@ -7,23 +7,29 @@
 
 #include "../ContaInterface/containterface.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
+                                          ui(new Ui::MainWindow),
+                                          m_loginWidget(new LoginWidget()),
+                                          m_stack(new QStackedWidget())
 {
     ui->setupUi(this);
     loadPlugin();
+    initialize();
 }
 
 MainWindow::~MainWindow()
 {
+    delete m_loginWidget;
+    delete m_stack;
     delete m_contaPlugin;
     delete ui;
 }
 
 void MainWindow::initialize()
 {
-
+    m_stack->addWidget(m_loginWidget);
+    m_stack->setCurrentIndex(0);
+    this->setCentralWidget(m_stack);
 }
 
 bool MainWindow::loadPlugin()
